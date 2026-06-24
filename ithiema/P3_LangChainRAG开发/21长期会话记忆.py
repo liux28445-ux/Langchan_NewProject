@@ -7,7 +7,7 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnableWithMessageHistory
-
+from langchain_ollama.chat_models import ChatOllama
 
 # message_to_dict：单个消息对象（BaseMessage类实例） -> 字典
 # messages_from_dict：[字典、字典...]  -> [消息、消息...]
@@ -61,7 +61,9 @@ class FileChatMessageHistory(BaseChatMessageHistory):
 
 
 
-model = ChatTongyi(model="qwen3-max")
+# model = ChatTongyi(model="qwen3-max")
+model = ChatOllama(model="qwen3:4b")
+
 # prompt = PromptTemplate.from_template(
 #     "你需要根据会话历史回应用户问题。对话历史：{chat_history}，用户提问：{input}，请回答"
 # )
@@ -103,11 +105,11 @@ if __name__ == '__main__':
         }
     }
 
-    # res = conversation_chain.invoke({"input": "小明有2个猫"}, session_config)
-    # print("第1次执行：", res)
-    #
-    # res = conversation_chain.invoke({"input": "小刚有1只狗"}, session_config)
-    # print("第2次执行：", res)
+    res = conversation_chain.invoke({"input": "小明有2个猫"}, session_config)
+    print("第1次执行：", res)
+
+    res = conversation_chain.invoke({"input": "小刚有1只狗"}, session_config)
+    print("第2次执行：", res)
 
     res = conversation_chain.invoke({"input": "总共有几个宠物"}, session_config)
     print("第3次执行：", res)
