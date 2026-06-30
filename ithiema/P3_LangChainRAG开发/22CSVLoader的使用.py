@@ -14,7 +14,6 @@ loader = CSVLoader(
 
 # 批量加载 .load()   ->  [Document, Document, ...]
 # documents = loader.load()
-#
 # for document in documents:
 #     print(type(document), document)
 
