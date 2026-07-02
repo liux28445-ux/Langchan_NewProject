@@ -1,5 +1,6 @@
 from langchain_community.chat_models import ChatTongyi
 from langchain_core.documents import Document
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
 from vector_stores import VectorStoreService
@@ -42,5 +43,7 @@ class RAGService(object):
                 {
                     "input": RunnablePassthrough(),
                     "context": retrieve | formart_document
-                } | self.prompt
+                } | self.prompt | self.chat_model | StrOutputParser()
             )
+
+            return  chain
