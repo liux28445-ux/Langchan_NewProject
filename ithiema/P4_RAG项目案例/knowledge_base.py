@@ -54,7 +54,7 @@ class KnowledgeBaseService(object):
 
         self.chroma = Chroma(
             collection_name=config.collection_name,     # 数据库的表名
-            embedding_function=DashScopeEmbeddings(model="text-embedding-v1"),
+            embedding_function=DashScopeEmbeddings(model="text-embedding-v4"),
             persist_directory=config.persist_directory,     # 数据库本地存储文件夹
         )     # 向量存储的实例 Chroma向量库对象
 
