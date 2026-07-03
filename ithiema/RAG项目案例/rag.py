@@ -1,12 +1,13 @@
 from langchain_community.chat_models import ChatTongyi
 from langchain_core.documents import Document
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.runnables import RunnablePassthrough, RunnableWithMessageHistory
 
+from ithiema.RAG项目案例.file_history_store import get_history
 from vector_stores import VectorStoreService
 from langchain_community.embeddings import DashScopeEmbeddings
 import config_data as config
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 
 class RAGService(object):
@@ -20,6 +21,8 @@ class RAGService(object):
             [
                 ("system","以我提供的己知参考资料为主,"
                 "简洁和专业的回答用户问题。参考资料:{context}。"),
+                ("system","并且我提供用户的对话记录，如下："),
+                MessagesPlaceholder("history"),
                 ("user","请回答用户提问:{input}")
             ]
         )
@@ -46,4 +49,10 @@ class RAGService(object):
                 } | self.prompt | self.chat_model | StrOutputParser()
             )
 
+            RunnableWithMessageHistory(
+                chain,
+                get_history,
+                input_messages_key="input",
+                history_messages_key="chat_history"
+            )
             return  chain
