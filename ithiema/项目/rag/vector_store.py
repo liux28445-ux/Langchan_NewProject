@@ -1,3 +1,13 @@
+import ssl
+import certifi
+
+_old_create_default_context = ssl.create_default_context
+
+def _patched_create_default_context(*args, **kwargs):
+    kwargs.setdefault("cafile", certifi.where())
+    return _old_create_default_context(*args, **kwargs)
+
+ssl.create_default_context = _patched_create_default_context
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from utils.config_handler import chroma_conf
